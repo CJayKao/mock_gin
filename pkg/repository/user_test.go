@@ -12,11 +12,12 @@ import (
 
 func TestUser(t *testing.T) {
 	mockUser := mocks.User{}
-	mockUser.On("NewUser", mock.AnythingOfType("context.Context"),
+	mockUser.On("NewUser",
+		mock.MatchedBy(func(context.Context) bool { return true }),
 		mock.AnythingOfType("string")).
 		Return(
 			func(ctx context.Context, name string) model.User {
-				return model.User{Name: "TestName"}
+				return model.User{Name: name}
 			},
 		)
 	data := mockUser.NewUser(context.TODO(), "name")
